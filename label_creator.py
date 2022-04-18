@@ -7,6 +7,10 @@ import win32api
 import win32print
 
 
+GHOSTSCRIPT_PATH = settings.printer_GHOSTSCRIPT_PATH
+GSPRINT_PATH = settings.printer_GSPRINT_PATH
+currentprinter = win32print.GetDefaultPrinter()
+
 conn_STRING = "DRIVER={};SERVER={};DATABASE={};UID={};PWD={}".format(
     settings.sql_driver,
     settings.sql_server,
@@ -38,7 +42,7 @@ def get_sql_data(order_id):
 
 def render_pdf(rows):
 
-    path = settings.html_output_dir
+    path = settings.pdf_output_dir
     isExist = os.path.exists(path)
 
     if not isExist:
@@ -53,8 +57,22 @@ def render_pdf(rows):
         canvas.drawString(5, 50, f"{row.NAME} - {row.ID}")
         canvas.save()
 
+        # win32api.ShellExecute(
+        #     0, "printto", filename, '"%s"' % win32print.GetDefaultPrinter(), ".", 0
+        # )
         win32api.ShellExecute(
-            0, "printto", filename, '"%s"' % win32print.GetDefaultPrinter(), ".", 0
+            0,
+            "open",
+            GSPRINT_PATH,
+            '-ghostscript "'
+            + GHOSTSCRIPT_PATH
+            + '" -printer "'
+            + currentprinter
+            + '" '
+            + filename
+            + "",
+            ".",
+            0,
         )
 
 
