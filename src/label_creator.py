@@ -1,5 +1,5 @@
 import pyodbc
-import settings
+import src.settings as settings
 import os
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.lib.units import mm
@@ -28,13 +28,11 @@ def get_user_input():
 
 def get_sql_data(order_id):
 
-    with open(settings.sql_query, 'r', encoding="UTF-8") as f:
+    with open(settings.sql_query, "r", encoding="UTF-8") as f:
         data = f.read()
     try:
         with pyodbc.connect(conn_STRING) as conn:
-            rows = conn.execute(
-                data, (order_id)
-            ).fetchall()
+            rows = conn.execute(data, (order_id)).fetchall()
     except pyodbc.Error as e:
         sqlstate = e.args[1]
         print(f"ERROR: {sqlstate}")
@@ -56,12 +54,10 @@ def render_pdf(rows):
 
         canvas = Canvas(filename, pagesize=(100 * mm, 60 * mm))
         canvas.setFont("Times-Roman", 10)
-        canvas.drawString(5, 50, f"{row.NAME} - {row.ID}")
+        canvas.drawString(5 * mm, 50 * mm, f"{row.NAME} - {row.ID}")
+        canvas.line(0 * mm, 49 * mm, 100 * mm, 49 * mm)
         canvas.save()
 
-        # win32api.ShellExecute(
-        #     0, "printto", filename, '"%s"' % win32print.GetDefaultPrinter(), ".", 0
-        # )
         win32api.ShellExecute(
             0,
             "open",
@@ -76,7 +72,3 @@ def render_pdf(rows):
             ".",
             0,
         )
-
-
-while True:
-    get_user_input()

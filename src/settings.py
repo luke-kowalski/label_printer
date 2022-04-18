@@ -2,7 +2,7 @@ from configparser import ConfigParser, ExtendedInterpolation
 
 parser = ConfigParser(interpolation=ExtendedInterpolation())
 parser.optionxform = str
-parser.read("config.ini")
+parser.read("src\config.ini")
 
 # SQL
 sql_driver = parser.get("SERVER_CONN", "DRIVER")
