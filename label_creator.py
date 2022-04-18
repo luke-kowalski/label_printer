@@ -28,10 +28,12 @@ def get_user_input():
 
 def get_sql_data(order_id):
 
+    with open(settings.sql_query, 'r', encoding="UTF-8") as f:
+        data = f.read()
     try:
         with pyodbc.connect(conn_STRING) as conn:
             rows = conn.execute(
-                "SELECT * FROM PROADMIN WHERE NAME = ?", (order_id)
+                data, (order_id)
             ).fetchall()
     except pyodbc.Error as e:
         sqlstate = e.args[1]

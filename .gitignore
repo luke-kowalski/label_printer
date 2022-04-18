@@ -1,6 +1,7 @@
 *.ini
 *.pdf
 *.html
+*.sql
 __pycache__/
 notepad.py
 notepad2.py
