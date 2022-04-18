@@ -1,2 +1,6 @@
 *.ini
+*.pdf
+*.html
 __pycache__/
+notepad.py
+notepad2.py
